@@ -26,12 +26,16 @@ class Game:
         self.win_height =(self.row_count + 1) * self.box_height
         self.win_dim = self.win_width, self.win_height
         self.game_map = None
-        self.player_color = red_color
-        self.enemy_color = green_color
+        self.player_color = green_color
+        self.enemy_color = red_color
 
+        # flag determines the end of the game
         self.play = False
+
+        # flag determines pausing ticks and rendering the screen
         self.pause = False
 
+        # flag determines turn of the player
         self.turn = True
 
     def start(self):
@@ -45,12 +49,15 @@ class Game:
         self.game_map = Map(self)
         self.game_map.load()
 
+        self.pause = True
         self.server.start()
         self.recv_thr = thr.Thread(target=self.recv_thread)
         self.recv_thr.start()
 
         self.play = True
         self.pause = False
+
+        # Game loop
         while self.play:
             clock.tick(60)
             events = pygame.event.get()

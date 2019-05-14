@@ -27,6 +27,9 @@ class Box:
         self.circle_color = wight_color
         self.box_state = STATE_NONE
 
+        self.player_color = game.player_color
+        self.enemy_color = game.enemy_color
+
     def control(self, events):
         pass
 
@@ -48,12 +51,12 @@ class Box:
         return self.x, self.y
 
     def set_player(self):
-        self.circle_color = green_color
+        self.circle_color = self.player_color
         self.box_state = STATE_PLAYER
         print("box is player:", self.x, self.y, self.i, self.j)
 
     def set_enemy(self):
-        self.circle_color = red_color
+        self.circle_color = self.enemy_color
         self.box_state = STATE_ENEMY
         print("box is enemy:", self.x, self.y, self.i, self.j)
 
@@ -81,7 +84,6 @@ class Map:
         self.map_height = self.row_count * self.box_height
 
         self.boxes_map = []
-        self.top_boxes = [0] * self.column_count
         self.player_win = False
         self.enemy_win = False
 
@@ -118,8 +120,8 @@ class Map:
                     self.game.turn = False
 
     def tick(self):
-        self.check_win()
-
+        if self.check_win():
+            self.game.pause = True
 
     def render(self, window):
         for row in self.boxes_map:
@@ -148,7 +150,6 @@ class Map:
                 box.set_none()
         self.player_win = False
         self.enemy_win = False
-
 
     def get_box(self, pos_x, pos_y):
         box_i = self.pos_x // self.box_width + 1
@@ -259,7 +260,6 @@ class Map:
 
             if self.check_win_boxes(row_box):
                 return True
-
         return False
 
     def check_win(self):
