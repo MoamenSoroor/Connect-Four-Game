@@ -1,4 +1,4 @@
-from client.components import *
+from server.components import *
 from client.client_conn import *
 import threading as thr
 

@@ -3,6 +3,7 @@ import threading as thr
 import socket as soc
 import sys , trace
 
+
 class ClientComm(thr.Thread):
     def __init__(self, peer_addr):
         super().__init__()
@@ -51,14 +52,15 @@ class ClientComm(thr.Thread):
     def is_play(self):
         return self.play
 
-
     def send(self, data):
         if self.conn_soc is None:
             return
-        self.conn_soc.send(str(data).encode("utf-8"))
+        try:
+            self.conn_soc.send(str(data).encode("utf-8"))
+        except Exception as e:
+            print(e)
 
     def recv(self):
-
         # ------------------ blocking function --------------------
         if self.conn_soc is None:
             return None
